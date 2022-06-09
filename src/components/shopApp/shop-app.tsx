@@ -55,37 +55,26 @@ export class ShopApp extends React.Component<MyProps, MyState> {
     const prods = this.state.products;
     const idx = lodash.findIndex(prods, { title: title })
     let currentFavs = this.state.numFavorites
-    let totalFavs: any;
+    let totalFavs: number;
 
-    if (prods[idx].isFavorite) {
-      prods[idx].isFavorite = false;
-      totalFavs = --currentFavs
-    } else {
-      totalFavs = ++currentFavs
-      prods[idx].isFavorite = true;
-    }
+    prods[idx].isFavorite ? totalFavs = --currentFavs : totalFavs = ++currentFavs
+    prods[idx].isFavorite = !prods[idx].isFavorite;
 
     this.setState(() => ({ products: prods, numFavorites: totalFavs }));
   }
 
-  onSubmit(payload: { title: string; description: string, price: string }) {
+  onSubmit(payload: Product) {
     const updated = lodash.clone(this.state.products);
-    updated.push({
-      title: payload.title,
-      description: payload.description,
-      price: payload.price
-    });
+    const { title, description, price } = payload;
 
-    this.setState({
-      products: updated,
-      prodCount: lodash.size(this.state.products) + 1
-    });
+    const newData = {
+      title: title,
+      price: price,
+      description: description,
+    }
 
     this.setState({
       isOpen: false,
-    });
-
-    this.setState({
       isShowingMessage: true,
       message: 'Adding product...'
     })
@@ -93,40 +82,40 @@ export class ShopApp extends React.Component<MyProps, MyState> {
     // **this POST request doesn't actually post anything to any database**
     fetch('https://fakestoreapi.com/products', {
       method: "POST",
-      body: JSON.stringify(
-        {
-          title: payload.title,
-          price: payload.price,
-          description: payload.description,
-        }
-      )
+      body: JSON.stringify(newData)
     })
       .then(res => res.json())
       .then(json => {
-        (function (t) {
+        ((t) => {
           setTimeout(() => {
-            t.setState({
+            //since this api is fake and not returning required output that's why
+            // adding new data into existing state
+            updated.push(newData);
+
+            this.setState({
+              products: updated,
+              prodCount: lodash.size(this.state.products) + 1,
               isShowingMessage: false,
               message: ''
-            })
+            });
           }, 2000)
         })(this);
       })
   }
 
   render() {
-    const { products, isOpen } = this.state;
+    const { products, isOpen, isShowingMessage, message, prodCount, numFavorites } = this.state;
     return (
-      <React.Fragment>
+      <>
         <div className={styles.header}>
-          <div className={['container', styles.headerImageWrapper].join(' ')}>
+          <div className={`container ${styles.headerImageWrapper}`}>
             <img src={logo} className={styles.headerImage} />
           </div>
         </div>
 
         <>
           <span
-            className={['container', styles.main].join(' ')}
+            className={`container ${styles.main}`}
             style={{ margin: '50px inherit', display: 'flex', justifyContent: 'space-evenly' }}
           >
             <img src={img1} style={{ maxHeight: "15em", display: 'block' }} />
@@ -134,54 +123,50 @@ export class ShopApp extends React.Component<MyProps, MyState> {
           </span>
         </>
 
-        <div className={['container', styles.main].join(' ')} style={{ paddingTop: 0 }}>
+        <div className={`container ${styles.main}`} style={{ paddingTop: 0 }}>
           <div className={styles.buttonWrapper}>
             <span role="button">
               <Button
-                onClick={function (this: any) {
+                onClick={() =>
                   this.setState({
                     isOpen: true,
-                  });
-                }.bind(this)}
+                  })
+                }
               >Send product proposal</Button>
             </span>
-            {this.state.isShowingMessage && <div className={styles.messageContainer}>
-              <i>{this.state.message}</i>
-            </div>}
+            {isShowingMessage &&
+              <div className={styles.messageContainer}>
+                <i>{message}</i>
+              </div>}
           </div>
 
           <div className={styles.statsContainer}>
-            <span>Total products: {this.state.prodCount}</span>
-            {' - '}
-            <span>Number of favorites: {this.state.numFavorites}</span>
+            <span>Total products: {prodCount} - Number of favorites: {numFavorites}</span>
           </div>
 
-          {products && !!products.length ? <ProductList products={products} onFav={this.favClick} /> : <div></div>}
+          {products && !!products.length && <ProductList products={products} onFav={this.favClick} />}
         </div>
 
-        <>
-          <Modal
-            isOpen={isOpen}
-            className={styles.reactModalContent}
-            overlayClassName={styles.reactModalOverlay}
-          >
-            <div className={styles.modalContentHelper}>
-              <div
-                className={styles.modalClose}
-                onClick={function (this: any) {
-                  this.setState({
-                    isOpen: false,
-                  });
-                }.bind(this)}
-              ><FaTimes /></div>
+        <Modal
+          isOpen={isOpen}
+          className={styles.reactModalContent}
+          overlayClassName={styles.reactModalOverlay}
+        >
+          <div className={styles.modalContentHelper}>
+            <div
+              className={styles.modalClose}
+              onClick={() =>
+                this.setState({
+                  isOpen: false
+                })
+              }
+            ><FaTimes /></div>
 
-              <Form
-                on-submit={this.onSubmit}
-              />
-            </div>
-          </Modal>
-        </>
-      </React.Fragment>
+            <Form on-submit={this.onSubmit} />
+          </div>
+        </Modal>
+
+      </>
     );
   }
 }
