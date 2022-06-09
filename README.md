@@ -1,5 +1,33 @@
 # Developer at Droppe - React refactoring task
 
+## Following changes have been made
+
+1. Provide app title in index.html because as per previous code initially the title appears to be React app before the scripts load in the browser then it changes to Droppe refractor app after script loaded.
+
+2. Update Project structure 
+
+3. Create Product interface explicitly in model.ts
+
+4. Update fetch products api call
+
+5. Optimize favClick function
+
+6. Optimize onSubmit function
+
+7. Destructure all required states and props
+
+8. In className use dynamic string instead of join() as join use extra operation
+
+9. Update props types in all components
+
+10. Use of id as a key instead of index
+
+11. Put ellipses if title is too long
+
+12. Update target to es2015 from es5 to fix IterableIterator errors
+
+13. Write test cases
+
 ## Available Scripts
 
 To run the project first clone the repo by 
