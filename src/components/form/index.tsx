@@ -1,9 +1,10 @@
 import * as React from "react";
+import { Product } from "../../model";
 import { Button } from "../button";
 import styles from "./form.module.css";
 
 type IFormProps = {
-  "on-submit": (payload: { title: string; description: string; price: string }) => void;
+  "on-submit": (payload: Product) => void;
 }
 
 export const Form: React.FC<IFormProps> = (props) => {
@@ -12,7 +13,7 @@ export const Form: React.FC<IFormProps> = (props) => {
   let priceRef = React.useRef<HTMLInputElement>(null);
   let descriptionRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!titleRef.current?.value) {
