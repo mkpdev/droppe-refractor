@@ -7,7 +7,7 @@ type IFormProps = {
   "on-submit": (payload: Product) => void;
 }
 
-export const Form: React.FC<IFormProps> = (props) => {
+const Form: React.FC<IFormProps> = (props) => {
   let formRef = React.useRef<HTMLFormElement>(null);
   let titleRef = React.useRef<HTMLInputElement>(null);
   let priceRef = React.useRef<HTMLInputElement>(null);
@@ -38,7 +38,7 @@ export const Form: React.FC<IFormProps> = (props) => {
   };
 
   return (
-    <form className={styles.form} onSubmit={(event) => handleSubmit(event)} ref={formRef}>
+    <form data-testid="productAdd-form" className={styles.form} onSubmit={(event) => handleSubmit(event)} ref={formRef}>
       <span className={styles.label}>Product title: *</span>
 
       <input
@@ -46,6 +46,7 @@ export const Form: React.FC<IFormProps> = (props) => {
         placeholder="Title..."
         defaultValue=""
         className={styles.input}
+        data-testid="title"
       />
 
       <span className={styles.label}>Product details: *</span>
@@ -55,6 +56,7 @@ export const Form: React.FC<IFormProps> = (props) => {
         placeholder="Price..."
         defaultValue=""
         className={styles.input}
+        data-testid="price"
       />
 
       <textarea
@@ -62,9 +64,12 @@ export const Form: React.FC<IFormProps> = (props) => {
         placeholder="Start typing product description here..."
         defaultValue=""
         className={styles.textarea}
+        data-testid="description"
       />
 
       <Button>Add a product</Button>
     </form>
   );
 };
+
+export default Form

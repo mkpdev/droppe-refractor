@@ -2,9 +2,10 @@ import * as React from "react";
 import lodash from 'lodash';
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
+
 import { Button } from "../button";
 import ProductList from "../productListComponents";
-import { Form } from "../form";
+import Form from "../form";
 import logo from "../../images/droppe-logo.png";
 import img1 from "../../images/img1.png";
 import img2 from "../../images/img2.png";
@@ -97,7 +98,7 @@ export class ShopApp extends React.Component<MyProps, MyState> {
       <>
         <div className={styles.header}>
           <div className={`container ${styles.headerImageWrapper}`}>
-            <img src={logo} className={styles.headerImage} />
+            <img  data-testid="droppeLogo" alt="droppeLogo" src={logo} className={styles.headerImage} />
           </div>
         </div>
 
@@ -106,8 +107,8 @@ export class ShopApp extends React.Component<MyProps, MyState> {
             className={`container ${styles.main}`}
             style={{ margin: '50px inherit', display: 'flex', justifyContent: 'space-evenly' }}
           >
-            <img src={img1} style={{ maxHeight: "15em", display: 'block' }} />
-            <img src={img2} style={{ maxHeight: "15rem", display: 'block' }} />
+            <img data-testid="doctorsImg" src={img1} alt="doctorsImg" style={{ maxHeight: "15em", display: 'block' }} />
+            <img data-testid="labImg" src={img2} alt="labImg" style={{ maxHeight: "15rem", display: 'block' }} />
           </span>
         </>
 
