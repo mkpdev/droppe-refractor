@@ -9,21 +9,9 @@ import logo from "../../images/droppe-logo.png";
 import img1 from "../../images/img1.png";
 import img2 from "../../images/img2.png";
 import styles from "./shopApp.module.css";
+import { Product } from "../../model";
 
 type MyProps = {};
-
-interface Product {
-  category?: string
-  description: string
-  id?: number
-  image?: string
-  price: string | number
-  rating?: { rate: number, count: number }
-  count?: number
-  rate?: number
-  title: string
-  isFavorite?: boolean
-}
 
 type MyState = {
   products: Product[],
@@ -36,7 +24,7 @@ type MyState = {
 
 export class ShopApp extends React.Component<MyProps, MyState> {
 
-  constructor(props: any) {
+  constructor(props: MyProps) {
     super(props);
 
     this.favClick = this.favClick.bind(this);
