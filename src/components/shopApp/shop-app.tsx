@@ -44,24 +44,11 @@ export class ShopApp extends React.Component<MyProps, MyState> {
 
     this.state = { products: [], isOpen: false, isShowingMessage: false, message: '', numFavorites: 0, prodCount: 0 };
 
-    fetch('https://fakestoreapi.com/products').then((response) => {
-      let jsonResponse = response.json();
-
-      jsonResponse.then((rawData) => {
-        let data = [];
-
-        for (let i = 0; i < rawData.length; i++) {
-          let updatedProd = rawData[i];
-          data.push(updatedProd);
-        }
-        this.setState({
-          products: data,
-        });
-        this.setState({
-          prodCount: data.length
-        })
+    fetch('https://fakestoreapi.com/products')
+      .then(response => response.json())
+      .then((rawData: Product[]) => {
+        this.setState({ products: rawData, prodCount: rawData.length });
       });
-    });
   }
 
   favClick(title: string) {
